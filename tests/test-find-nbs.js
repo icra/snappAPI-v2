@@ -344,21 +344,21 @@ describe("Test /find-nbs", () => {
            expect(result[0].surface_method).to.eq("tis_model")
         });
         it('uses organic load ratio when only bod_in is provided', async () => {
-            let result = await findNBS({techIds: ["French_CW"], inflow: 500, pollutantsConcentrations: {bod_in: 80}});
+            let result = await findNBS({techIds: ["French_CW"], inflow: 0.5, pollutantsConcentrations: {bod_in: 80}});
             expect(result[0].surface_method).to.eq("organic_loading_rate")
             expect(result[0].surface_mean).to.be.within(1.33, 1.34)
             expect(result[0].surface_low).to.be.within(1.00, 1.01)
             expect(result[0].surface_high).to.be.within(1.66, 1.67)
         });
         it('uses organic load ratio data is out of range', async () => {
-            let result = await findNBS({techIds: ["French_CW"], inflow: 5000, pollutantsConcentrations: {bod_in: 80, bod_out: 20}});
+            let result = await findNBS({techIds: ["French_CW"], inflow: 5, pollutantsConcentrations: {bod_in: 80, bod_out: 20}});
             expect(result[0].surface_method).to.eq("organic_loading_rate")
             expect(result[0].surface_mean).to.be.within(13.333, 13.334)
             expect(result[0].surface_low).to.be.within(10.000, 10.001)
             expect(result[0].surface_high).to.be.within(16.666, 16.667)
         });
         it('uses m2_pe when only people equivalent is provided', async () => {
-            let result = await findNBS({techIds: ["French_CW"], inflow: 50});
+            let result = await findNBS({techIds: ["French_CW"], inflow: 0.05});
             expect(result[0].surface_method).to.eq("ratio_m2_pe")
             expect(result[0].surface_mean).to.be.within(0.8, 0.9)
             expect(result[0].surface_low).to.be.within(0.6, 0.7)

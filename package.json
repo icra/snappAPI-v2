@@ -25,7 +25,7 @@
     "node-fetch": "^2.6.12",
     "nodejs-polars": "^0.8.2",
     "nodemailer": "^6.9.8",
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.1.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pug": ">=3.0.1",
