@@ -477,23 +477,45 @@ Multicriteria decision analysis (MCDA) is a method to weight different criteria 
 
 ### Environmental impact
 
-It is calculated as a combination of energy use, eutrophication risks and biohazard risks, at this moment it is not calculated from rain and runoff technologies because all variables used have the same value and, therefore, the environmental impact is the same for all technologies:
+It is calculated as a combination of energy use, eutrophication risks due to ammonium, nitrates and phosphates, and climate change mitigation due to carbon sequestration:
 
 $$
-EI = \frac{(1 - e) + r_{NH_4} + r_{NO_2} + (1 - \frac{br}{3})}{4}
+EI = \frac{(1 - e) + r_{NH_4} + r_{NO_3} + r_{PO_4^3} + \frac{cs}{3}}{5}
 $$
 
-Where $EI$ is environmental impact ($\in[0,1]$) being 1 the lowest impact; $e$ is energy use ($\in{0,1}$); $r_{NH_4}$ is the capacity of the technology to remove ammonia ($\in\{0,1\}$); $r_{NO_2}$ is the capacity of the technology to remove nitrates ($\in\{0,1\}$); and $br$ is the biohazard risk of the technology ($\in[0,3]$).
+Where $EI$ is environmental impact ($\in[0,1]$) being 1 the lowest impact; $e$ is energy use ($\in\{0,1\}$); $r_{NH_4}$ is the capacity of the technology to remove ammonia ($\in[0,1]$); $r_{NO_3}$ is the capacity of the technology to remove nitrates ($\in\{0,1\}$); $r_{PO_4^3}$ is the capacity of the technology to remove phosphates ($\in\{0,1\}$);and $cs$ is the carbon sequestration capacity of the solution ($\in[0,3]$).
 
-### Multifunctionality
+### Biodiversity
 
-Multifunctionality considers the capacity of the tehcnology to provide cobenefits and ecosystem services. It is calculated as an average of all cobenefits:
+Biodiversity considers the capacity of the solution to sustain and enhance biodiversity. It is calculated as a combination of the scores in biodiversity related to flora, to fauna and the capacity to sustain pollinators:
 
 $$
-M = \frac{1}{N}\sum_{i = 1}^N{\frac{cb_i}{3}}
+B = \frac{flora + fauna + pollinators}{9}
+$$
+Where $B$ is biodiversity enhancement ($\in[0,1]$), being 1 the major biodiversity;$flora$, $fauna$, and $pollinators$ are qualitative scores given to each solution ($\in[0,3]$)
+
+### Cultural benefits
+
+Cultural benefits are the nonmaterial benefits people obtain from the solution. In this case, we consider aesthetic values, recreational functions, and temperature regulation. Also, biohazard risk as disminishing these cultural benefits:
+
+$$
+CB = \frac{av + rf + tr + (3 - br)}{12}
 $$
 
-Where $M$ stands for multifunctionality ($\in[0,1]$) being 1 the highest multifunctionality; $N$ is the number of considered cobenefits; and $cb_i$ is the score for the cobenefit $i$ ($\in[0,3]$). 
+Where $CB$ is cultural benefits ($\in[0,1]$); $av$ is aesthetic value ($\in[0,3]$), $rf$ is the recreational functions ($\in[0,3]$), $tr$ is the temperatura regulation ($\in[0,3]$) and $br$ is the biohazard risk of being exposed to the solution ($\in[0,3]$).
+
+### Circularity
+
+Circularity is the capacity of the solution to generate resources that can be used in other processes. Specifically, water reuse and materials are estimated from a combination of different variables: 
+
+- Water reuse: lost of flow rate between inlet and outlet, the reduction of pathogens, and the score given by experts on water reuse capacity.
+- Materials: Expert assessment on biosolids production, biomass production and food production.
+
+$$
+C = \frac{(1 - lf) + pr + \frac{wr + bsp + bmp + fp}{3}}{6}
+$$
+
+Where $C$ is the circularity score ($\in[0,1]$); $lf$ is the lost of flowrate ($\in[0,1]$); $pr$ is the pathogens reduction capacity ($\in\{0,1\}$); $wr$, $bsp$, $bmp$ and $fp$ are the scores assessed by experts in water reuse, biosolids production, biomass production, and food production, respectively (all of them $\in[0,3]$)
 
 ### Space requirements
 
@@ -502,18 +524,19 @@ Space requirements is the surface needed for the technology. In case, the scenar
 $$
 SR_i = \frac{s_{min}}{s_i}
 $$
-where $SR_i$ is the space requirements ($\in(0,1]$) for technology $i$; $s_{min}$ is the minimum surface among all compared technologies and $s_i$ is the surface of technology $i$. when the data to estimate the surface is not provided, the ratio of $m^2/pe$ is used for treatment technologies (larger ratio equals to smaller score) and $sc * d$ is used for stormwater management technologies. See @sec-surface-estimation for more details about surface estimation.
+
+where $SR_i$ is the space requirements ($\in(0,1]$) for technology $i$; $s_{min}$ is the minimum surface among all compared technologies and $s_i$ is the surface of technology $i$. when the data to estimate the surface is not provided, the ratio of $m^2/pe$ is used for treatment technologies (larger ratio equals to smaller score) and $\phi * H$ is used for stormwater management technologies. See @sec-surface-estimation for more details about surface estimation.
 
 ### Operation and manteinance
 
-Operation and manteinance is the level of difficulty in keep the technology properly working. It is estimated as a combination of required manpower and required skills:
+Operation and maintenance is the level of difficulty in keep the technology properly working. It is estimated as a combination of required manpower, required skills, biohazard risk of exposition and if energy is required:
 
 $$
-OM = 1 - \frac{m + s}{6}
+OM = 1 - \frac{mp + sk + br + e}{10}
 $$
-Where $OM$ is the operation and manteinance score ($\in[0,1]$) being 1 the lowest operation and manteinance requirements; $m$ is the level of required manpower ($\in[0,3]$); and $s$ is the level of required skills ($\in[0,3]$).
+Where $OM$ is the operation and maintenance score ($\in\{0,1\}$) being 1 the lowest operation and manteinance requirements; $mp$ is the level of required manpower ($\in[0,3]$); $sk$ is the level of required skills ($\in[0,3]$); $br$ is the biohazard risk of being exposed to the solution ($\in[0,3]$); and $e$ indicates if energy is required ($\in\{0,1\}$)
 
-### Cost
+### Construction cost
 
 The cost is calculated as the total construction cost using the estimated surface. The costs for all technologies are normalized regarding the technology with the minimal cost.
 
@@ -521,6 +544,16 @@ $$
 \hat{c}_i = \frac{c_{min}}{c_i}
 $$
 where $\hat{c}_i$ is the normalized construction cost ($\in(0,1]$) for technology $i$; $c_{min}$ is the minimum cost among all compared technologies and $c_i$ is the cost of technology $i$.
+
+### Removal performance
+
+This criteria compares the solutions in terms of their removal capacity, assumed that all solutions compared already satisfy the scenario requirements in terms of water quality in the effluent:
+
+$$
+RP = \frac{r_{BOD} + r_{COD} + r_{TN} + r_{NH_4} + r_{NO_3} + r_{PO_4^3} + r_p}{7}
+$$
+
+Where $RP$ is the score in removal performance ($\in[0,1]$); $r_{BOD}$ is the removal performance in BOD ($\in[0,1]$); $r_{COD}$ is the removal performance in COD ($\in[0,1]$); $r_{TN}$ is the removal performance in total nitrogen ($\in[0,1]$); $r_{NH_4}$ is the removal performance in ammonia ($\in[0,1]$); $r_{NO_3}$ express the capacity to remove nitrates ($\in{0,1}$); $r_{PO_4^3}$ express the capacity to remove phosphates ($\in{0,1}$); and $r_{p}$ express the capacity to reduce pathogens (_E.coli_ and H.eggs) ($\in{0,1}$). This criteria is only calculated for waswater treatment solutions.
 
 ## Weights
 

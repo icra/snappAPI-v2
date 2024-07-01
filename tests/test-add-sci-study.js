@@ -68,6 +68,13 @@ describe('Test /add-sci-study', ()=> {
             let result = await addTreatmentSciDetails(body);
             expect(result).to.have.keys(['error', 'success']);
         });
+
+        it('Returns errors when outflow > inflow', async () => {
+            body.inflow = 100
+            body.outflow = 101
+            let result = await addTreatmentSciDetails(body)
+            expect(result).to.have.keys(['error', 'success']);
+        });
     });
     // describe('Insert case study', () => {
     //     it('Insert case study', async () => {
