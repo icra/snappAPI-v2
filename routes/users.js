@@ -124,6 +124,8 @@ router.post('/update-data',upload.single('file'), auth.auth, async function (req
         }
 
         let result = await updateData(data, req.data.id);
+
+        result.updated_data = data;
         res.send(result);
     } catch (e){
         console.log('error',e);
